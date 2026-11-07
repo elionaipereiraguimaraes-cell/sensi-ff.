@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sensi FF</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ padding:20px;
+ background:#090d18;
+ color:white;
+ font-family:Arial,sans-serif;
+}
+.container{
+ max-width:450px;
+ margin:auto;
+}
+h1{
+ text-align:center;
+ color:#00e5ff;
+}
+.card{
+ background:#151e30;
+ padding:18px;
+ border-radius:14px;
+ margin:15px 0;
+}
+label{display:block;margin:12px 0 7px}
+select,button{
+ width:100%;
+ padding:13px;
+ border:0;
+ border-radius:9px;
+ margin-top:8px;
+}
+select{background:#25334b;color:white}
+input[type=range]{width:100%}
+.valor{
+ color:#00e5ff;
+ font-weight:bold;
+}
+button{
+ background:#00c8e5;
+ color:#00131a;
+ font-weight:bold;
+}
+.dica{
+ background:#25334b;
+ padding:12px;
+ border-radius:9px;
+ margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>🔥 SENSI FF</h1>
+<p style="text-align:center">Painel de configurações e dicas</p>
+
+<div class="card">
+<h3>📱 Modelo do celular</h3>
+<select id="celular">
+<option value="geral">Escolha seu celular</option>
+<option>Samsung A05</option>
+<option>Samsung A15</option>
+<option>Samsung A25</option>
+<option>Motorola G14</option>
+<option>Motorola G54</option>
+<option>Redmi 12</option>
+<option>Redmi Note 13</option>
+<option>iPhone</option>
+<option>Outro</option>
+</select>
+<button onclick="gerar()">GERAR SENSIBILIDADE</button>
+</div>
+
+<div class="card">
+<h3>🎯 Sensibilidade</h3>
+
+<div id="controles"></div>
+
+<button onclick="copiar()">COPIAR CONFIGURAÇÃO</button>
+</div>
+
+<div class="card">
+<h3>💡 Dicas de jogo</h3>
+<div class="dica">Treine a mira no modo treinamento.</div>
+<div class="dica">Ajuste a sensibilidade aos poucos.</div>
+<div class="dica">Experimente diferentes configurações.</div>
+<div class="dica">Mantenha uma conexão estável.</div>
+</div>
+
+</div>
+
+<script>
+const nomes=[
+"GERAL",
+"RED DOT",
+"MIRA 2X",
+"MIRA 4X",
+"AWM",
+"OLHADINHA"
+];
+
+const area=document.getElementById("controles");
+
+nomes.forEach((nome,i)=>{
+ area.innerHTML+=`
+ <label>${nome}: <span class="valor" id="v${i}">100</span></label>
+ <input type="range" min="0" max="200" value="100"
+ id="s${i}" oninput="atualizar(${i})">
+ `;
+});
+
+function atualizar(i){
+ document.getElementById("v"+i).textContent=
+ document.getElementById("s"+i).value;
+}
+
+function gerar(){
+ let modelo=document.getElementById("celular").value;
+ let base=modelo==="Samsung A05"?155:
+ modelo==="iPhone"?140:
+ modelo==="Outro"?130:145;
+
+ nomes.forEach((n,i)=>{
+ let valor=Math.min(200,Math.max(0,base-i*8));
+ document.getElementById("s"+i).value=valor;
+ atualizar(i);
+ });
+}
+
+function copiar(){
+ let texto="SENSI FF\n";
+ texto+="Celular: "+document.getElementById("celular").value+"\n";
+ nomes.forEach((n,i)=>{
+ texto+=n+": "+document.getElementById("s"+i).value+"\n";
+ });
+ if(navigator.clipboard){
+ navigator.clipboard.writeText(texto)
+ .then(()=>alert("Configuração copiada!"))
+ .catch(()=>alert(texto));
+ }else{
+ alert(texto);
+ }
+}
+</script>
+</body>
+</html>
