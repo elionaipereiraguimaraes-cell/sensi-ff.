@@ -23,11 +23,12 @@ jobs:
 
       - name: Configurar Android
         uses: android-actions/setup-android@v3
+        with:
+          accept-android-sdk-licenses: true
 
-  
-
-- name: Aceitar licenças Android
-  run: yes | sdkmanager --licenses
+      - name: Instalar SDK
+        run: |
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Criar projeto Android
         run: |
@@ -86,8 +87,7 @@ jobs:
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
               <application
                   android:theme="@android:style/Theme.Material.Light.NoActionBar"
-                  android:label="Sensi FF"
-                  android:usesCleartextTraffic="true">
+                  android:label="Sensi FF">
                   <activity
                       android:name=".MainActivity"
                       android:exported="true">
