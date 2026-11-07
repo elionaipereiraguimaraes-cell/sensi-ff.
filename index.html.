@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AIM BOOST PANEL V3</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;padding:18px;
+ background:#080b0a;color:white;
+ font-family:Arial,sans-serif;
+}
+header{text-align:center;padding:18px}
+header h1{
+ color:#39ff88;font-size:29px;
+ text-shadow:0 0 12px #39ff8866;
+}
+header p{color:#888;font-size:12px}
+.card{
+ background:#111815;
+ border:1px solid #263a30;
+ border-radius:15px;
+ padding:17px;margin-bottom:15px;
+}
+h3{color:#39ff88;margin-top:0}
+select{
+ width:100%;padding:13px;
+ background:#202a24;color:white;
+ border:1px solid #39ff88;
+ border-radius:9px;margin:7px 0;
+}
+button{
+ width:100%;padding:14px;
+ border:1px solid #39ff88;
+ border-radius:9px;
+ background:#17271e;color:#39ff88;
+ font-weight:bold;margin-top:10px;
+}
+.result{
+ display:flex;justify-content:space-between;
+ padding:12px;background:#19221d;
+ border-radius:8px;margin:7px 0;
+}
+.result span:last-child{
+ color:#39ff88;font-weight:bold;
+}
+.tip{
+ background:#19221d;padding:13px;
+ border-radius:10px;margin:10px 0;
+ border-left:3px solid #39ff88;
+ line-height:1.5;
+}
+small{color:#888}
+footer{text-align:center;color:#666;font-size:11px;padding:20px}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>AIM BOOST</h1>
+<p>GAMING PERFORMANCE PANEL V3.0</p>
+</header>
+
+<div class="card">
+<h3>📱 SELECIONE SEU CELULAR</h3>
+
+<select id="brand" onchange="loadModels()">
+<option value="">Escolha a marca</option>
+<option>Samsung</option>
+<option>Motorola</option>
+<option>Xiaomi</option>
+<option>Redmi</option>
+<option>Realme</option>
+<option>Infinix</option>
+<option>Outro</option>
+</select>
+
+<select id="model">
+<option value="">Escolha o modelo</option>
+</select>
+
+<button onclick="generate()">🎯 GERAR SENSIBILIDADE</button>
+</div>
+
+<div class="card">
+<h3>🎯 MINHA SENSIBILIDADE</h3>
+<div id="results">Nenhuma configuração gerada.</div>
+<button onclick="generate()">🔄 GERAR NOVAMENTE</button>
+<button onclick="copyResult()">📋 COPIAR SENSIBILIDADE</button>
+</div>
+
+<div class="card">
+<h3>🎮 DICAS DE MIRA</h3>
+
+<div class="tip">
+<b>1. Treine a puxada</b><br>
+Pratique movimentos curtos e controlados na direção da cabeça.
+</div>
+
+<div class="tip">
+<b>2. Controle a mira</b><br>
+Evite arrastar o dedo com força excessiva. Faça movimentos suaves.
+</div>
+
+<div class="tip">
+<b>3. Treine no modo treinamento</b><br>
+Dedique alguns minutos para testar sua precisão antes das partidas.
+</div>
+
+<div class="tip">
+<b>4. Ajuste a sensibilidade</b><br>
+Teste uma configuração por vez e mantenha a que oferece melhor controle.
+</div>
+</div>
+
+<div class="card">
+<h3>⚡ DICAS DE DESEMPENHO</h3>
+
+<div class="tip">
+<b>1. Feche aplicativos desnecessários</b><br>
+Isso pode liberar memória para o jogo.
+</div>
+
+<div class="tip">
+<b>2. Evite aquecimento</b><br>
+Faça pausas quando o aparelho esquentar.
+</div>
+
+<div class="tip">
+<b>3. Confira a conexão</b><br>
+Prefira uma conexão estável para reduzir oscilações de latência.
+</div>
+
+<div class="tip">
+<b>4. Ajuste os gráficos</b><br>
+Se houver travamentos, experimente reduzir a qualidade gráfica.
+</div>
+</div>
+
+<div class="card">
+<h3>🏆 DICAS DE JOGO</h3>
+
+<div class="tip">
+<b>Movimentação</b><br>
+Treine movimentação lateral e evite ficar parado durante confrontos.
+</div>
+
+<div class="tip">
+<b>Posicionamento</b><br>
+Use coberturas e observe o ambiente antes de avançar.
+</div>
+
+<div class="tip">
+<b>Precisão</b><br>
+Priorize controlar a mira em vez de disparar sem direção.
+</div>
+</div>
+
+<footer>
+AIM BOOST PANEL • V3.0
+</footer>
+
+<script>
+const models={
+ Samsung:["Galaxy A05","Galaxy A06","Galaxy A15","Galaxy A25","Galaxy A35","Galaxy S23"],
+ Motorola:["Moto G14","Moto G24","Moto G34","Moto G54","Moto Edge 40"],
+ Xiaomi:["Xiaomi 13","Xiaomi 14"],
+ Redmi:["Redmi 12","Redmi 13C","Redmi Note 12","Redmi Note 13"],
+ Realme:["Realme C55","Realme C67","Realme 11"],
+ Infinix:["Hot 30","Hot 40","Note 30"],
+ Outro:["Outro modelo"]
+};
+
+let currentResult=null;
+
+function loadModels(){
+ const brand=document.getElementById("brand").value;
+ const select=document.getElementById("model");
+ select.innerHTML='<option value="">Escolha o modelo</option>';
+
+ (models[brand]||[]).forEach(model=>{
+  let option=document.createElement("option");
+  option.value=model;
+  option.textContent=model;
+  select.appendChild(option);
+ });
+}
+
+function generate(){
+ const brand=document.getElementById("brand").value;
+ const model=document.getElementById("model").value;
+
+ if(!brand||!model){
+  alert("Escolha seu celular!");
+  return;
+ }
+
+ const base=brand==="Outro"?145:160;
+ const variation=()=>Math.floor(Math.random()*21)-10;
+
+ const limit=n=>Math.max(0,Math.min(200,n));
+
+ currentResult={
+  celular:brand+" "+model,
+  geral:limit(base+variation()),
+  vermelho:limit(base+5+variation()),
+  mira2x:limit(base-5+variation()),
+  mira4x:limit(base-12+variation()),
+  awm:limit(base-20+variation())
+ };
+
+ const labels={
+  geral:"Geral",
+  vermelho:"Ponto vermelho",
+  mira2x:"Mira 2x",
+  mira4x:"Mira 4x",
+  awm:"AWM"
+ };
+
+ let html="<p>📱 "+currentResult.celular+"</p>";
+
+ Object.keys(labels).forEach(key=>{
+  html+=`<div class="result">
+  <span>${labels[key]}</span>
+  <span>${currentResult[key]}</span>
+  </div>`;
+ });
+
+ document.getElementById("results").innerHTML=html;
+}
+
+function copyResult(){
+ if(!currentResult){
+  alert("Gere uma sensibilidade primeiro!");
+  return;
+ }
+
+ const text=Object.entries(currentResult)
+ .map(([key,value])=>key+": "+value).join("\n");
+
+ if(navigator.clipboard){
+  navigator.clipboard.writeText(text)
+  .then(()=>alert("Copiado!"))
+  .catch(()=>fallback(text));
+ }else{
+  fallback(text);
+ }
+}
+
+function fallback(text){
+ const area=document.createElement("textarea");
+ area.value=text;
+ document.body.appendChild(area);
+ area.select();
+ document.execCommand("copy");
+ area.remove();
+ alert("Configuração copiada!");
+}
+</script>
+
+</body>
+</html>
