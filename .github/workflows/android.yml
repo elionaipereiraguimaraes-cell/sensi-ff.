@@ -1,3 +1,4 @@
+
 name: Build Sensi FF
 
 on:
@@ -11,13 +12,14 @@ jobs:
       - name: Baixar projeto
         uses: actions/checkout@v4
 
-      - name: Configurar Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Preparar Android
+      - name: Verificar arquivos
         run: |
+          pwd
+          ls -la
+          find . -maxdepth 3 -iname "index.html"
+
+      - name: Verificar HTML
+        run: |
+          test -f index.html
           mkdir -p app/src/main/assets
           cp index.html app/src/main/assets/index.html
