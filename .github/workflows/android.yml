@@ -21,14 +21,13 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Configurar Android
-        uses: android-actions/setup-android@v3
-        with:
-          accept-android-sdk-licenses: true
-
-      - name: Instalar SDK
+      - name: Aceitar licencas e instalar SDK
         run: |
-          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+
+          yes | "$SDKMANAGER" --licenses
+
+          "$SDKMANAGER" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Criar projeto Android
         run: |
@@ -136,4 +135,3 @@ jobs:
         with:
           name: Sensi-FF-APK
           path: app/build/outputs/apk/debug/app-debug.apk
-
