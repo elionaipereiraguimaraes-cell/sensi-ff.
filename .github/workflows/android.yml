@@ -1,0 +1,23 @@
+name: Build Sensi FF
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Preparar Android
+        run: |
+          mkdir -p app/src/main/assets
+          cp index.html app/src/main/assets/index.html
